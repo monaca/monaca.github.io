@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Bringing Native UI to PhoneGap</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/monaca.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="background"></div>
+
+      <img style="background: none; opacity: 0; position: absolute; top: 0; left: 0; border: 0; width: 149px; height: 149px;" src="img/left-orange@2x.png" id="forkme">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>Bringing Native UI to<br>PhoneGap Apps</h1>
+          <p>
+            <small>by <a href="http://monaca.mobi">Masahiro Tanaka</a></small>
+          </p>
+        </section>
+
+        <section>
+          <h2>User Experience</h2>
+          <p>
+            Users know the difference.
+          </p>
+          <p>As a developer, we wanted to bring them best user experience.</p>
+          
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">I don't want to be considerated as sub-optimal solution!</div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Back in old days...</h2>
+          <p>
+            Mobile WebView has performance issues
+          </p>
+          <ul>
+            <li>Especially old devices</li>
+            <li>Buggy position:fixed, overflow scrolling</li>
+            <li>Slow CPU & GPU</li>
+          </ul>
+          <h3 style="margin-top: 40px;" class="fragment zoom-in">Can HTML5 provide competitive UX to Native?</h3>
+        </section>
+        
+        <section>
+          <h2>Short Answer: Yes</h2>
+          <p>
+            But it required so many workarounds and glitches that are difficult to understand.
+          </p>
+          <p style="margin-top: 40px;">
+            And we needed to leave behind many of older Android devices
+          </p>
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">It is not a development. It's endless bug finding games! Do your best!!</div>
+          </div>
+        </section>
+        
+        <section>
+          <h2>But clients are killing us</h2>
+          <p>
+            Request from network carrier client:
+          </p>
+          <p style="margin-top: 1.5em;">
+            &ldquo;Please make this app compatible to <strong style="font-size: 200%;">all</strong> of our devices&rdquo;
+          </p>
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">Hybrid app may not be a right solution for Android pre-2.3 devices...</div>
+          </div>
+          <div class="fragment runthrough" style="width: 150%; left: -25%">
+            <img src="img/devices.png" style="max-height: none;">
+          </div>
+        </section>
+        
+        <section>
+          <h2>And we created</h2>
+          <p><img src="img/news_ex.png" class="transparent" width="305" height="603" style="opacity: 0.5"></p>
+          <p style="position: absolute; top: 50%; text-shadow: 0px 0px 10px black">KDDI's EZ News EX is pre-installed in all KDDI smartphone & tablet lineups.</p>
+          <p class="fragment zoom-in" style="position: absolute; top: 60%; font-size: 120%; text-shadow: 0px 0px 10px black; color: yellow;">But we needed to create several screens in native.</p>
+        </section>
+
+        <section>
+          <h2>If only we can provide native Navbar and Tabbar...</h2>
+        </section>
+
+        <section>
+          <h2>PG NativeControls Plugin</h2>
+
+<pre><code data-trim>
+function onDeviceReady() {
+  // iOS NativeControl Plugin
+  NativeControls.showTabBar(options);
+  
+  // or iOS NavigationBar || TabBar Plugin
+  navigationBar.init();
+  navigationBar.create("BlackOpaque");
+  navigationBar.setTitle("My heading");
+  navigationBar.show();
+}
+</code></pre>
+
+        <div class="callout">
+          <img src="img/cordova.png" style="width: 5em;">
+          <div class="narration">I will render it in the same page. To show different Bar in forwarding page, problems occur.</div>
+        </div>
+        
+        </section>
+
+        <section>
+          <h2>So we did <div class="fragment upsidedown" style="color: #cc3; margin: 2em 0">Opposite</div> Approach</h2>
+        </section>
+
+        <section>
+          <h2>Overriding Cordova(UI)WebView</h2>
+          <p>Displaying native components while rendering WebView</p>
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">Now I am very flexible in adapting native UIs. No fear to use scrolls!</div>
+          </div>
+        </section>
+        
+        <section>
+          <h2>And managing multiple Views</h2>
+          <p>So that native transition handles between each WebViews with animation</p>
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">It makes app difficult to maintain app state, but gives native animation between pages!</div>
+          </div>
+        </section>
+
+        <section>
+          <a href="http://monaca.mobi/" target="_blank">
+            <img src="img/monaca-ide.png" style="transition: all 2s ease; -webkit-transition-delay: 3s; transition-delay: 3s; max-width: none; max-height: none;" width="100%" height="100%">
+          </a>
+        </section>
+
+        <section>
+          <h2>Cross-Platform</h2>
+          <p>All components work on both iOS and Android platform.</p>
+          <p style="margin-top: 30px;">A few Android-only features:</p>
+          <ul>
+            <li>Supporting Native Menu</li>
+            <li>Hardware Button Support</li>
+          </ul>
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">In Android, Back button will not be displayed and hardware back button does the same job.</div>
+          </div>
+        </section>
+
+        <section data-name="forkme">
+          <h2>Fork Me!</h2>
+          <p>All of them are packed and can be obtained from GitHub.</p>
+          <p>Currently supports up to PhoneGap 2.9.</p>
+          <p>Plugin repository is now in progress.</p>
+          <p>&raquo; <a href="http://github.com/monaca">http://github.com/monaca</a></p>
+          <div class="callout">
+            <img src="img/cordova.png" style="width: 5em;">
+            <div class="narration">Please give us any feedbacks!</div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Thank You!</h1>
+          <p>Masahiro Tanaka (masahiro@asial.co.jp)</p>
+          <p><a href="http://monaca.mobi" target="_blank">Monaca.mobi</a></p>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        overview: false,
+        embedded: true,
+
+        leap: {
+        	naturalSwipe   : false,    // Invert swipe gestures
+        	pointerOpacity : 0.5,      // Set pointer opacity to 0.5
+        	pointerColor   : '#d80000' // Red pointer
+        },
+        
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/leap/leap.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+      
+      document.addEventListener("slidechanged", function(e) {
+        setTimeout(function() {
+          startNarration(e.currentSlide);
+          endNarration(e.previousSlide);
+        }, 1000);
+        
+        if (e.currentSlide.getAttribute("data-name") == "demo") {
+            document.getElementById("demo-ide").style.zIndex = 999;
+            document.getElementById("demo-ide").style.opacity = 1;
+        }
+        if (e.previousSlide.getAttribute("data-name") == "demo") {
+            document.getElementById("demo-ide").style["transitionDelay"] = "0s";
+            document.getElementById("demo-ide").style["-webkit-transition-delay"] = "0s";
+            document.getElementById("demo-ide").style.opacity = 0;
+            document.getElementById("demo-ide").style.zIndex = 0;
+        }
+        
+        if (e.currentSlide.getAttribute("data-name") == "forkme") {
+            document.getElementById("forkme").style.opacity = 1;
+        }
+        if (e.previousSlide.getAttribute("data-name") == "forkme") {
+            document.getElementById("forkme").style.opacity = 0;
+        }
+        
+      });
+      
+      function endNarration(slide) {
+        toArray(slide.querySelectorAll('[class*="callout"]')).forEach(function(callout) {
+          callout.style.opacity = 0;
+        });
+        toArray(slide.querySelectorAll('[class*="narration"]')).forEach(function(narration) {
+          narration.setAttribute("data-narration", "");
+        });
+      }
+      
+      function startNarration(slide) {
+        toArray(slide.querySelectorAll('[class*="callout"]')).forEach(function(callout) {
+          callout.style.opacity = 1;
+        });
+        
+        toArray(slide.querySelectorAll('[class*="narration"]')).forEach(function(narration) {
+          if (narration.getAttribute("data-narration") == "finish") {
+            return;
+          }
+          narration.style.opacity = "1";
+          narration.setAttribute("data-narration", "finish");
+          var n = narration.innerText;
+          var l = 0;
+          narration.innerText = " ";
+          var myInterval = setInterval(function() {
+            if (narration.innerText.length >= n.length) {
+              clearInterval(myInterval);
+              return;
+            }
+            if (n.substr(l, 1) == " ") {
+              l += 2;
+            } else {
+              l++;
+            }
+            narration.innerText = n.substr(0, l);
+          }, 30);
+        });
+      }
+      function toArray(o) {
+        return Array.prototype.slice.call(o);
+      }
+      
+      
+    </script>
+
+  </body>
+</html>
