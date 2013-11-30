@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>満足させるハイブリッドアプリを作るための実践テクニック</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/beige.css" id="theme">
+    
+    <style>
+      h1,h2,h3,h4,p,li {
+        font-family: "TsukuGoPr5-D", "Meiryo", "Hiragino Kaku Gothic Pro W6" !important
+      }
+      code {
+        font-family: "Consolas" !important;
+      }
+      #webcam {
+        transition: opacity 0.3s linear 0;
+      }
+    </style>
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+      $(document).ready(function() {
+        $(".fancybox").fancybox();
+      });
+    </script>
+
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  
+  </head>
+
+  <body>
+
+    <div id="webcam" style="width: 100%; height: 100%; position: absolute; z-index: 0; opacity: 0;">
+      <video autoplay width="100%" height="100%"></video>
+      <img src="" width="1366" height="768" >
+      <canvas style="display:none;" width="1366" height="768"></canvas>
+    </div>
+
+    <div class="reveal">
+
+      <div class="slides">
+        <section>
+          <h1></h1>
+          <h3>満足させるハイブリッドアプリを<br>作るための実践テクニック</h3>
+          <p>
+            <small>Masahiro Tanaka / Asial Corp.</small>
+          </p>
+        </section>
+
+        <section>
+          <h2>自己紹介</h2>
+          <img src="prof_photo_tanaka_400px.png" style="width: 150px; border: none;">
+          <p><a href="http://www.asial.co.jp/" target="_blank">アシアル株式会社</a>の代表取締役</p>
+          <p><a href="http://monaca.mobi/" target="_blank">Monaca</a>のプロダクトマネージャー</p>
+          <p><a href="https://www.facebook.com/massie.massie.massie">fb</a> / <a href="https://twitter.com/massie">@massie</a></p>
+          <p>趣味: 鉄道模型と飛行機</p>
+        </section>
+
+        <section>
+          <h2>今日のテーマ</h2>
+          <ul>
+            <li>ハイブリッドアプリを知る</li>
+            <li>テクニックを知る</li>
+            <li>開発・デバッグ手法を知る</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>ハイブリッドアプリとは？</h2>
+          <p>
+            <img src="hybrid.jpg" style="width: 200px;">
+          </p>
+          <p>
+            Web技術(WebView)を用いるネイティブ形式のアプリ。
+          </p>
+          <p>
+            JavaScriptでネイティブアプリを作る開発手法の１つ。
+          </p>
+        </section>
+
+        <section>
+          <h2>PhoneGapとCordova</h2>
+          <ul>
+            <li>ハイブリッドアプリ開発フレームワーク</li>
+            <li>ApacheプロジェクトによるOSS版：Cordova</li>
+            <li>Adobeによる製品版：PhoneGapとしてリリース</li>
+          </ul>
+          <p>Cordova = PhoneGap と捉えてOK</p>
+        </section>
+
+        <section>
+          <h2>PhoneGapの仕組み</h2>
+          <p><img src="phonegap.png"></p>
+          <p>①カメラやファイル操作などのAPIを拡張する<br>
+            ②単体パッケージとしてアプリを動作させる</p>
+        </section>
+        
+        <section>
+          <h2>Webアプリと異なる点</h2>
+          <ul>
+            <li style="margin-bottom: 1em;">ファイルはローカルに配置、オフライン対応</li>
+            <li style="margin-bottom: 1em;">ネイティブ機能をJavaScript APIで実装可能</li>
+            <li>特定のブラウザーエンジン上で実行</li>
+          </ul>
+        </section>
+        
+        <section>
+          <h2><a href="http://www.w3.org/TR/widgets/" target="_blank">Packaged Web Apps</a></h2>
+          <p>HTML5仕様で定義される、パッケージ型アプリ。</p>
+          <p>≒ ハイブリッドアプリ。</p>
+        </section>
+        
+        <section>
+          <h2>新しいプラットフォーム</h2>
+          <p>HTML5ネイティブなプラットフォームの登場</p>
+          <ul>
+            <li>Tizen</li>
+            <li>Firefox OS</li>
+            <li>Chrome Packaged Apps</li>
+            <ul>
+              <li>Chrome OS</li>
+              <li>Chrome Apps for Windows, Mac, Linux</li>
+              <li>Chrome Packaged Apps for iOS, Android</li>
+            </ul>
+          </ul>
+        </section>
+        
+        <section>
+          <p>あんなこともこんなことも。<br>そう、HTML5ならね。</p>
+        </section>
+        
+        <section>
+          <h2>なぜハイブリッドアプリ？</h2>
+          <ul>
+            <li>オフライン対応</li>
+            <li>ネイティブAPIの呼び出し、機能拡張</li>
+            <li>パッケージマネージャーを通じた配布</li>
+          </ul>
+        </section>
+
+        <section data-background="#F4EDC4">
+          <h2>実践テクニック ①</h2>
+          <h3>ルック＆フィール</h3>
+        </section>
+
+        <section>
+          <p>デモ</p>
+          <p><small><a href="http://www.iui-js.org/" target="_blank">http://www.iui-js.org/</a></small></p>
+        </section>
+
+        <section>
+          <h2>不気味の谷現象</h2>
+          <p><a class="fancybox" href="Bukimi_Ayu_02.jpg"><img src="Bukimi_Graph_Ayu.png"></a></p>
+        </section>
+        
+        <section>
+          <h2>選択肢は２つ</h2>
+          <p>１．ネイティブに極力近づける</p>
+          <p>２．自己ワールドを展開する</p>
+        </section>
+
+        <section>
+          <h3>方法1: ネイティブに近づける</h3>
+          <ol>
+            <li>
+              <p>HTML5、CSS3、JavaScriptで模倣する</p>
+              <p><small>デモ: <a href="https://github.com/c2prods/Project-Tyson" target="_blank">https://github.com/c2prods/Project-Tyson</a></small></p>
+            </li>
+            <li>
+              <p>ネイティブUIコンポーネントを使う</p>
+              <small>
+              <ul>
+                <li><a href="http://docs.monaca.mobi/ja/reference/native_index/" target="_blank">MonacaのネイティブUIコンポーネント</a></li>
+                <li><a href="http://www.appgyver.com/steroids" target="_blank">AppGyver Steroids</a></li>
+              </ul>
+              </small>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <h3>方法2: 独自ワールドを展開する</h3>
+          <style>
+            .wtable td {
+              font-size: 70%;
+              text-align: center !important;
+            }
+          </style>
+          <table class="wtable">
+          <tr>
+            <td><img src="ons-tunes.png" style="height: 400px"></td>
+            <td><img src="exfm.jpeg" style="height: 400px"></td>
+            <td><img src="rormix.jpeg" style="height: 400px"></td>
+          </tr>
+          <tr>
+            <td><a href="http://docs.monaca.mobi/onsen/ja" target="_blank">Onsen UI</a></td>
+            <td>Exfm</td>
+            <td>Rormix</td>
+          </tr>
+          </table>
+        </section>
+        
+        <section data-background="#F4EDC4">
+          <h3>ハイブリッドアプリのUXを向上する</h3>
+        </section>
+        
+        <section>
+          <h3>ビューポート制御</h3>
+          <code>
+            &lt;meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"&gt;
+          </code>
+          <br><br>
+          <p>タップ時の300msの遅延: <a href="https://github.com/ftlabs/fastclick" targt="_blank">fastclick.js</a>で解決</p>
+          
+        </section>
+
+        <section>
+          <h4><a href="http://blog.asial.co.jp/1147" target="_blank">ハイブリッドアプリを作成するときにいつも書くようにしているCSSプロパティいくつか！</a></h4>
+          <ul>
+            <li><code>-webkit-user-select: none;</code>
+              <p>ドキュメントの文字を選択できなくする</p>
+            </li>
+            <li><code>-webkit-tap-highlight-color: rgba(0, 0, 0, 0);</code>
+              <p>タップ時のリンク要素の枠を非表示にする</p>
+            </li>
+            <li><code>-webkit-touch-callout: none;</code>
+              <p>リンク長押し時のメニューを非表示にする</p>
+            </li>
+            <li><code>-webkit-overflow-scrolling: touch;</code>
+              <p>慣性スクロールを適用する（バグあり）</p>
+            </li>
+            <li><code>-webkit-transform: translateZ(0);</code>
+              <p>レイヤーを作成しGPU合成をONに</p>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>HTMLの特性を理解する</h2>
+          <div>
+            <h3 style="float: left;">強み</h3>
+            <ul>
+              <li>自由なレイアウト</li>
+              <li>回り込みなどのテキスト処理</li>
+              <li>CSS3を使った簡単・豊富なエフェクト</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1em;">
+            <h3 style="float: left;">弱み</h3>
+            <ul>
+              <li>大量のデータ処理</li>
+              <li>マルチスレッド、バックグラウンドタスク</li>
+              <li>3D描画、インタラクティブなコンテンツ</li>
+            </ul>
+          </div>
+        </section>
+        
+        <section data-background="#F4EDC4">
+          <h2>実践テクニック ②</h2>
+          <h3>高速化</h3>
+        </section>
+
+        <section>
+          <h2>Critical Rendering Path</h2>
+          <p>読み込み～描画までの順序、ボトルネックを知る。</p>
+          <a href="criticalrenderingpath.png" class="fancybox"><img src="criticalrenderingpath.png" width="640"></a>
+          <p><small><a href="https://docs.google.com/presentation/d/1IRHyU7_crIiCjl0Gvue0WY3eY_eYvFQvSfwQouW9368/present" target="_blank">https://docs.google.com/presentation/d/1IRHyU7_crIiCjl0Gvue0WY3eY_eYvFQvSfwQouW9368/present</a></small></p>
+        </section>
+        
+        <section>
+          <h3>シングルページ と マルチページ</h3>
+          <p><small>例: jQuery Mobileで複数ページを定義する例</small></p>
+<pre><code><!-- 1ページ目 -->
+<div data-role="page" id="foo">
+  <div data-role="header">
+  	<h1>ヘッダー</h1>
+  </div>
+  <div data-role="content">
+  	<p>1ページ目のコンテンツ</p>
+  	<p>次のページを表示 <a href="#bar">bar</a></p>
+  </div>
+  <div data-role="footer">
+  	<h4>フッター</h4>
+  </div>
+</div>
+
+<!-- 2ページ目 -->
+<div data-role="page" id="bar">
+  <div data-role="header">
+  	<h1>ヘッダー</h1>
+  </div>
+  <div data-role="content">
+  	<p>2ページ目のコンテンツ</p>
+  	<p><a href="#foo">最初のページへ</a></p>
+  </div>
+  <div data-role="footer">
+  	<h4>フッター</h4>
+  </div>
+</div>
+</code></pre>
+        </section>
+        
+        <section>
+          <h2>JSによる再描画</h2>
+          <p>JS → スタイル/レイアウト → 描画 → 合成</p>
+<pre><code><p id='hideme'>消したいコンテンツ</p>
+
+&lt;script&gt;
+// 再レイアウト処理が実行するため遅い
+document.getElementById("hideme").style.display="none;";
+
+// Composite（合成）のみ実行
+document.getElementById("hideme").style.opacity="0";
+&lt;/script&gt;
+</code></pre>
+          <p><small>極力レイアウト（リフロー）処理を避ける</small></p>
+        </section>
+        
+        <section>
+          <h2>HWアクセラレーション</h2>
+          <ul>
+          <li>Androidの場合ネイティブコードで切り替え<br>
+            <small>ただしAndroid 4以降で有効。バグあり。</small></li>
+          <li>GPUが使われるCSSアニメーションを活用</li>
+          <li><a href="http://famo.us" target="_blank">famo.us</a>のような描画ライブラリを使用</li>
+          </ul>
+        </section>
+        
+        <section>
+          <h2>他にも...</h2>
+          <ul>
+            <li>レイヤーテクニック: <code>translateZ(0)</code></li>
+            <li><code>requestAnimationFrame</code>を使う</li>
+            <li>Recalculate Style Storm</li>
+          </ul>
+          <br><br>
+          <h4>地道な改良を続ける...</h4>
+        </section>
+          
+        <section data-background="#F4EDC4">
+          <h2>実践テクニック ③</h2>
+          <h3>開発とデバッグ</h3>
+        </section>
+        
+        <section>
+          <style>
+            .ttable {
+              border-collapse: collapse;
+            }
+            .ttable th {
+              background-color: #eef;
+            }
+            .ttable td {
+              background-color: #fff;
+            }
+            .ttable td, .ttable th {
+              border: 1px solid #ccc;
+              padding: 0.5em;
+              text-align: center !important;
+              font-size: 75%;
+            }
+          </style>
+          <h3>開発ツール</h3>
+          <table class="ttable" width="100%">
+            <tr>
+              <th width="33%">ローカル開発</th>
+              <th width="33%">コマンドライン</th>
+              <th width="34%">クラウド型開発</th>
+            </tr>
+            <tr>
+              <td>Xcode、Eclipse</td>
+              <td>Cordovaコマンド</td>
+              <td><a href="http://monaca.mobi/" target="_blank">Monaca</a>や
+              <a href="http://applican.com" target="_blank">アプリカン</a></td>
+            </tr>
+            <tr>
+              <td>ネイティブ開発にハイブリッド機能を組み込む</td>
+              <td>gruntなどのJSツールやエディタを利用できる</td>
+              <td>ローカルにインストールすることなく開発を開始できる</td>
+            </tr>
+          </table>
+        </section>
+        
+        <section>
+          <h2>デバッグ方法</h2>
+          <p>デバッグ対象のOSバージョンなどの状況に応じて使い分け</p>
+          <ul>
+            <li>ブラウザで表示してデバッグ</li>
+            <li>リモートデバッグツール</li>
+            <li>Weinre / jsHybuggerなどの外部ツール</li>
+          </ul>
+        </section>
+        
+        <section>
+          <h3>Mobile SafariのWebインスペクタ</h3>
+          <p>
+            USBで接続されたiOSに、PCのSafariからリモートデバッグ
+          </p>
+          <img src="web-inspector.png" style="height: 300px;">
+          <ul>
+            <li>Windowsでは接続不可</li>
+            <li>Mobile Safariかデバッグビルドされたアプリに対応</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Chrome Remote Debugging</h2>
+          <p>
+            USBで接続されたAndroid版Chromeに、PCのChromeからリモートデバッグ
+          </p>
+          <img src="chrome-remote-debug.png" style="height: 300px;">
+          <ul>
+            <li>Android 4.4からWebViewでもデバッグ可能に</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Weinre</h3>
+          <p>node.jsで作られたリモートインスペクター</p>
+          <p><a href="weinre.png" class="fancybox"><img src="weinre.png" style="width: 500px;"></a></p>
+          <p>デモ: <a href="http://debug.phonegap.com" target="_blank">http://debug.phonegap.com</a></p>
+          <p>ソース: <a href="https://github.com/apache/cordova-weinre" target="_blank">https://github.com/apache/cordova-weinre</a></p>
+        </section>
+        
+        <section>
+          <h3>jsHybugger</h3>
+          <p>Androidの標準WebViewにJSデバッグ機能を追加</p>
+          <p><img style="background-color:#fff; padding: 0.5em;" src="jshybugger.png"></p>
+          <p>デモ: <a href="https://www.jshybugger.com/" target="_blank">https://www.jshybugger.com/</a></p>
+          <p>※有償サービス</p>
+        </section>
+        
+        <section>
+          <h2>ライブリロード</h2>
+          <p>コードの変更を検知して自動的にブラウザーを再読込</p>
+          <ul>
+            <li><a href="https://github.com/apache/cordova-app-harness" target="_blank">Cordova App Harnessプロジェクト（開発中）</a></li>
+            <li><a href="http://html.adobe.com/edge/inspect/" target="_blank">Adobe Edge Inspect</a></li>
+            <li><a href="http://docs.monaca.mobi/ja/manual/debugger_index/">Monacaデバッガー</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>最後に</h2>
+          <ul>
+            <li>知識を増やす</li>
+            <li>原因を知る</li>
+            <li>経験を積む</li>
+          </ul>
+          <p class="fragment roll-in" style="font-size: 120%;">＋<br>共有する<br><br></p>
+          <p class="fragment roll-in">一緒にハイブリッドアプリ開発を盛り上げていきましょう！</p>
+        </section>
+        
+        <section>
+          <h3>ありがとうございました。</h3>
+          <p>スライドのURL: <br>
+          <a href="http://monaca.github.io/slides/2013-html5conf/" target="_blank">http://monaca.github.io/slides/2013-html5conf/</a></p>
+        </section>
+
+        <section>
+          <img src="final-slide_20131127.png">
+        </section>
+
+      </div>
+      
+      <div style="position: absolute; right: 1em; bottom: 1em; font-size: 50%;">
+        HTML5カンファレンス2013
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        backgroundTransition: 'slide',
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+      var video = document.querySelector('video');
+      var canvas = document.querySelector('canvas');
+      var ctx = canvas.getContext('2d');
+      var localMediaStream = null;
+  
+      //カメラ使えるかチェック
+      var hasGetUserMedia = function() {
+        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia || navigator.msGetUserMedia);
+      }
+      //エラー
+      var onFailSoHard = function(e) {
+        console.log('エラー!', e);
+      };
+  
+      //カメラ画像キャプチャ
+      var snapshot = function() {
+        if (localMediaStream) {
+          ctx.drawImage(video, 0, 0);
+          document.querySelector('img').src = canvas.toDataURL('image/webp');
+        }
+      }
+  
+      if (hasGetUserMedia()) {
+        console.log("カメラ OK");
+      } else {
+        alert("未対応ブラウザです。");
+      }
+  
+  
+      window.URL = window.URL || window.webkitURL;
+      navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  
+      navigator.getUserMedia({video: true}, function(stream) {
+        video.src = window.URL.createObjectURL(stream);
+        localMediaStream = stream;
+      }, onFailSoHard);
+  
+      //ボタンイベント
+      snapshot();
+  
+    </script>
+
+  </body>
+</html>
