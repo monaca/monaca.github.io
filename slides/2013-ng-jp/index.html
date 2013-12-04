@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Onsen UI</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Onsen UI</h1>
+					<h3>AngularJS 勉強会</h3>
+					<p>
+						<small>by <a target="_blank" href="https://twitter.com/kruyvanna">Kruy Vanna </a>&amp; <a target="_blank" href="https://twitter.com/dotrikun"> Hiroshi Shikata</a></small>
+					</p>
+				</section>
+				<!-- Who are you ? -->
+				<section>
+					<p>自己紹介</p>
+				</section>
+
+				<section>
+					<p style="text-align:left;">
+						Kruy Vanna  (クルィ ヴァナ)
+					</p>
+					<hr>
+					<ul>
+						<li>1984年生まれカンボジア出身。
+						<li>インスピレーション全開な生粋のハッカー。	
+						<li>OnsenUIを作った人。
+					</ul>
+				</section>
+
+				<section>
+					<p style="text-align:left;">
+						四方　裕  (シカタ ヒロシ)
+					</p>
+					<hr>
+					<ul>
+						<li>1985年生まれの元海上自衛隊員。
+						<li>アシアル社にてSE/PGを務める。
+						<li>OnsenUIの企画と開発の裏方を担当。
+					</ul>
+				</section>
+
+				<!-- What are you doing? -->
+				<section>
+					<h3>なにやってる人？</h3>
+				</section>
+
+				<section>
+					<p style="text-align:left;">
+						モバイルアプリ開発フォーム 「<b>Monaca</b>」の開発メンバー
+					</p>
+					<hr>
+					<div>
+						<a target="_blank" href="https://monaca.mobi" ><image src="images/logo-bg-blue-yoko.png"></image></a>
+					</div>
+					<p>
+						HTML5でiOS/Android/Windows8アプリが作れる開発ツール
+					</p>
+					<p>
+						詳しくは<a target="_blank" href="https://monaca.mobi">monaca.mobi</a>でどうぞ。
+					</p>
+				</section>
+				
+				<!-- What is Onsen UI ? -->
+				<section>
+					<p>Onsen UIとは？</p>
+				</section>
+
+				<section>
+					<section>
+						<p>
+							AngularJSとTopcoatを組み合わせた
+						</p>
+						<p><strong style="color:#13daec;">HTML5 モバイルUIフレームワーク</strong></p>
+					</section>
+					<section>
+						<p>
+							OnsenUIで作ったアプリ
+						</p>
+						<hr>
+						<iframe height="600" width="330" src="http://docs.monaca.mobi/onsen/OnsenUI/demo/kitchen_sink.html"></iframe>
+					</section>
+				</section>
+
+				<!-- Why did you create Onsen UI? -->
+				<section>
+					<h3>Onsen UIはなぜ作られたのか</h3>
+				</section>
+
+				<section>
+					<p>
+						モバイルアプリの開発プラットフォームとして
+						<br>
+						<br>
+						<strong style="color:#13daec;">モバイル向けのUIをHTML5で簡単に作る方法</strong>
+						<br><br>
+						を提供したかった。
+					</p>
+				</section>
+				<section>
+					<section>
+						<p>
+							jQuery Mobileなどいくつかの方法を試みるも解決に至らず
+						</p>
+					</section>
+<!-- 					<section>
+						<p>
+							jQuery Mobileで作ったUI
+						</p>
+						<hr>
+						<image src="images/IMG_0182.png"></image>
+					</section> -->
+					<section>
+						<p>
+							jQuery Mobileのメリットとデメリット
+						</p>
+						<hr>
+						<ul>
+							<li><font style="color: #13daec;">コンポーネントがたくさんある</font>
+							<li><font style="color: #ff6347;">UXがイマイチ</font>
+							<li><font style="color: #ff6347;">ソースコードが冗長になる</font>
+							<li><font style="color: #ff6347;">一部のAndroid端末で動かないことがある</font>
+						</ul>
+					</section>
+				</section>
+<!-- 				<section>
+					<section>
+						<p>
+							方法2:&nbsp;ネイティブのUIKitを呼び出して使う
+						</p>
+					</section>
+					<section>
+						<p>
+							UIKitを組み合わせて作ったUI
+						</p>
+						<hr>
+						<image src="images/IMG_0181.png"></image>
+					</section>
+					<section>
+						<p>
+							UIKitを使った場合のメリット・デメリット
+						</p>
+						<hr>
+						<ul>
+							<li><font style="color: #13daec;">UXは良好</font>
+							<li><font style="color: #13daec;">JSON形式でUI定義を設定するだけと使い方も簡単</font>
+							<li><font style="color: #ff6347;">OS/UIKitのバージョンアップについていけない</font>
+							<li><font style="color: #ff6347;">サポートできるコンポーネントが限られる</font>
+						</ul>
+					</section>
+				</section> -->
+
+				<!-- What do you want at Onsen UI -->
+				<section>
+					<p>Onsen UIで実現したかったこと</p>
+				</section>
+				<section>
+					<p>
+						とにかく
+					</p>
+					<br>
+					<p><strong style="color:#13daec;">「簡単に」「カッコ良くて」「使える」</strong></p>
+					<p><strong style="color:#13daec;">UIが作りたい！</strong></p>
+					<br>
+					<p>ということ。</p>
+					<br>
+					<p>（そしてできるだけメンテが楽な仕組みで！）</p>
+				</section>
+
+				<!-- Features of Onsen UI -->
+				<section>
+					<p>Onsen UIの特徴</p>
+				</section>
+				<section>
+					<p style="text-align:left;">
+						特徴その1: <font style="color:#13daec;">「簡単」</font>かつ<font style="color:#13daec;">「使える」</font>UIコンポーネント</a></p>
+					</p>
+					<hr>
+					<ul>
+						<li>使い方はDirectiveで作られた<font style="color:#13daec;">独自タグ</font>をHTMLに書くだけ
+						<li><a target="_blank" href="http://docs.monaca.mobi/onsen/docs/ja/#button" >よく使う基本的なコンポーネント</a>がデフォルトで用意されている
+						<li>ナビゲーションコンポーネントで<font style="color:#13daec;">ページ管理</font>できる
+						<li>他のHTML5コンポーネントも一緒に使える
+					</ul>
+				</section>
+				<section>
+					<p style="text-align:left;">
+						特徴その2: <font style="color:#13daec;">ぬるぬる動く</font>
+					</p>
+					<hr>
+					<ul>
+						<li>CSSを利用した滑らかなアニメーション
+						<li>Android 2.3でも動くようカスタマイズ
+					</ul>
+				</section>
+				<section>
+					<section>
+						<p style="text-align:left;">
+							特徴その3: テーマ機能
+						</p>
+						<hr>
+						<ul>
+							<li>テーマを変更するだけで<font style="color:#13daec;">全コンポーネントのデザイン変更</font>ができる
+							<li><a target="_blank" href="http://fontawesome.io/icons/" >Font Awesome</a>をサポート
+							<li>さらにCSSで独自にカスタマイズできる
+						</ul>
+					</section>
+					<section>
+						<p>
+							Onsen Blue
+						</p>
+						<hr>
+						<p>
+							<img src="images/t01.jpg" alt="">
+							<img src="images/t02.jpg" alt="">
+						</p>
+					</section>
+					<section>
+						<p>
+							Onsen Orange
+						</p>
+						<hr>
+						<p>
+							<img src="images/t03.jpg" alt="">
+							<img src="images/t04.jpg" alt="">
+						</p>
+					</section>
+					<section>
+						<p>
+							Onsen Purple
+						</p>
+						<hr>
+						<p>
+							<img src="images/t05.jpg" alt="">
+							<img src="images/t06.jpg" alt="">
+						</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<p>実際のアプリ</p>
+					</section>
+
+					<section>
+						<p>Todo & Flickr App</p>
+						<iframe height="600" width="330" src="http://docs.monaca.mobi/onsen/OnsenUI/demo/kitchen_sink.html"></iframe>
+					</section>
+					<section>
+						<p>Monaca Tunes</p>
+						<iframe height="600" width="330" src="http://kruyvanna.github.io/Blog_Demos/monaca_tunes/app/index.html"></iframe>
+					</section>
+				</section>
+
+				<section>
+					<p>Onsen UIのこれから</p>
+				</section>
+
+				<section>
+					<ul>
+						<li>Onsen UIのGUIツール<font style="color:#13daec;">「UIBuilder（仮）」</font>の提供
+						<li>Webコンポーネントを<font style="color:#13daec;">公開・共有</font>できる仕組み作り
+						<li>AdobeのTopcoatチームと共同して開発を進めていく
+					</ul>
+				</section>
+
+				<section>
+					<a target="_blank" href="https://github.com/OnsenUI/OnsenUI" title=""><img height="200" width="200" src="images/red_bg.png" alt=""></a>
+					<a target="_blank" href="https://github.com/OnsenUI/OnsenUI" title=""><img height="200" width="200" src="img/Octocat.jpg" alt=""></a>
+					<p>
+						<a target="_blank" href="https://github.com/OnsenUI/OnsenUI" title="">https://github.com/OnsenUI/OnsenUI</a>
+					</p>
+				</section>
+
+				<section>
+					<p>Thank you for your attention !</p>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+		<a target="_blank" href="https://github.com/OnsenUI/OnsenUI" title="">
+			<img height="70" width="70" src="images/red_bg.png" alt="" style="position: absolute; top: 88%;  left: 2%; ">
+		</a>
+	</body>
+</html>
