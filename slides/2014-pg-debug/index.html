@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Debugging a PhoneGap application</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600);
+        h1,h2,h3,h4,p,li {
+            font-family: "Open Sans" !important;
+            font-weight: 400 !important;
+        }
+        h1, h2, h3 {
+            font-weight: 600 !important;
+        }
+        code {
+            font-family: "Monaco" !important;
+        }
+        #webcam {
+            transition: opacity 0.3s linear 0;
+        }
+  table.bt {
+   border-collapse: collapse;
+    margin-top: 1em;  
+  }
+  table.bt tr td, table.bt tr th {
+    border: 1px solid #aaa;
+    padding: 0.5em;
+    white-space: nowrap;
+    text-align: center;
+        vertical-align: middle;
+    font-size: 80%;
+    background-color: white;
+  }
+
+      
+    </style>
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+    <script>
+        document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+          $(document).ready(function() {
+            $(".fancybox").fancybox();
+          });
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="webcam" style="width: 100%; height: 100%; position: absolute; z-index: 0; opacity: 0;">
+        <video autoplay width="100%" height="100%"></video>
+        <img src="" width="1366" height="768">
+        <canvas style="display:none;" width="1366" height="768"></canvas>
+    </div>
+
+    <div class="reveal">
+
+        <div class="slides">
+            <section>
+                <h1></h1>
+                <h3>Debugging a Phonegap App</h3>
+                <p>
+                    <small><strong>Masahiro Tanaka</strong> <font color="#999">| Monaca &amp; Onsen UI</font></small>
+                </p>
+            </section>
+
+            <section>
+                <h2>Who am I?</h2>
+                <img src="prof_photo_tanaka_400px.png" style="width: 150px; border: none;">
+                <p>Founder &amp; CEO of Monaca, Tokyo Japan</p>
+                <p>Our works:
+                    <a href="http://monaca.mobi/" target="_blank">Monaca</a> and 
+                    <a href="http://onsenui.io/" target="_blank">Onsen UI</a>
+                </p>
+                <p>
+                    <a href="https://www.facebook.com/massie.massie.massie">Link to Facebook</a> /
+                    <a href="https://twitter.com/massie">Twitter @massie</a>
+                </p>
+            </section>
+
+            <section>
+                <h2>Agenda</h2>
+                <ul>
+                    <li>Learn about debugging options.</li>
+                    <li>Learn about debugging tools.</li>
+                    <li>Know about live reloading tools.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Debugging and Testing</h2>
+                <p>
+                    Testing: to find problems.
+                </p>
+                <p>
+                    Debugging: to fix problems.
+                </p>
+            </section>
+            
+            <section>
+                <h2>Debugging Difficulties</h2>
+                <ul>
+                    <li><strong>Use PC browser to debug first?</strong> It may not work on mobile phones, or vice versa.<br><br></li>
+                    <li><strong>Cross platform development?</strong> Need to install and check on all target devices.<br><br></li>
+                    <li><strong>Limited WebView debugging capability?</strong> Want something like the Chrome Dev Tool?</li>
+                </ul>
+            </section>
+            <section>
+              
+                <h2>PG Debugging Solutions</h2>
+                <p>No swiss army knife, but you can combine them together.</p>
+                <table class="bt">
+                <tr>
+                  <th></th>
+                  <th>OS</th>
+                  <th>Console.log</th>
+                  <th>DOM Inspect</th>
+                  <th>JS Debug</th>
+                  <th>Pitfalls</th>
+                </tr>
+                <tr>
+                  <th>W/o tools</th>
+                  <td>iOS, Android</td>
+                  <td>✔</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Weinre</th>
+                  <td>iOS, Android</td>
+                  <td>✔</td>
+                  <td>✔</td>
+                  <td>Limited</td>
+                  <td>No breakpoints</td>
+                </tr>
+                <tr>
+                  <th>Safari<br>Remote Debug</th>
+                  <td>iOS</td>
+                  <td>✔</td>
+                  <td>✔</td>
+                  <td>✔</td>
+                  <td>iOS >= 6</td>
+                </tr>
+                <tr>
+                  <th>Chrome<br>Remote Debug</th>
+                  <td>Android</td>
+                  <td>✔</td>
+                  <td>✔</td>
+                  <td>✔</td>
+                  <td>Android >= 4.4</td>
+                </tr>
+                </table>
+            </section>
+
+            <section>
+                <h2>console.log Debugging</h2>
+                <ul>
+                    <li>Android: logcat output (tag: <code>CordovaLog</code>).</li>
+                    <li>iOS: NSLog output.</li>
+                </ul>
+                <pre><code>// Subset of console functions
+console.debug("I'm an debug message");
+console.info({key: "I'm an info message"}); // [object Object]
+console.log("I'm a log message");
+console.warn("Warning!", "Secondary message"); // Only first argument
+console.error(["It's error!!", "Second error"]); // It's error!!,Second error
+</code></pre>
+            </section>
+
+            <section>
+                <h2>Capturing JS Exceptions</h2>
+                <pre><code>// for Android
+WebView myWebView = (WebView) findViewById(R.id.webview);
+myWebView.setWebChromeClient(new WebChromeClient() {
+  public boolean onConsoleMessage(ConsoleMessage cm) {
+    Log.d("Appname", cm.message() + " line=" + cm.lineNumber() + " sourceId=" + cm.sourceId() );
+    return true;
+  }
+});</code></pre>
+<pre><code>// for iOS
+- (void)webView:(WebView *)webView  exceptionWasRaised:(WebScriptCallFrame *)frame
+       sourceId:(int)sid
+           line:(int)lineno
+    forWebFrame:(WebFrame *)webFrame {
+    if (kExceptionWasRaised)
+        NSLog(@"sourceId=%d line=%d function=%@ caller=%@ exception=%@", 
+              sid, lineno, [self functionNameForFrame:frame], [self callerForFrame:frame], [self exceptionForFrame:frame]);
+}</code></pre>
+                </p>
+            </section>
+
+            <section>
+                <h2>Weinre Remote Debugger</h2>
+                <p>Setup your own server from npm repository.</p>
+                <pre><code># npm -g install weinre
+$ weinre --httpPort 8888 --boundHost 192.168.xxx.xxx</code></pre>
+                <br><p>Or use PhoneGap hosted service: <a href="http://debug.phonegap.com/" target="_blank">debug.phonegap.com</a><br>
+              and just follow the instructions!</p>
+                
+            </section>
+
+            <section>
+                <h2>Safari Remote Inspector</h2>
+                <p><strong>Requirements:</strong> Debug or simulator built app, iOS 6, and Mac Safari</p>
+                <ol>
+                    <li>Enable Web Inspector under Safari Advanced settings.</li>
+                    <li>Open Safari, enable develop menu.</li>
+                    <li>Plug your device via USB connection.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>Chrome Remote Debug</h2>
+                <p><strong>Requirements:</strong> Android 4.4 (KitKat), Chrome browser</p>
+                <ol>
+                  <li>Set debuggable flag to "true" (by default)</li>
+                  <li>Open Chrome and navigate to <strong>chrome://inspect</strong>.</li>
+                  <li>When the pairing is done, you should see your device.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>jsHybugger</h2>
+                <p>Enables JavaScript debugging for older Android devices.</p>
+                <iframe src="https://www.jshybugger.com" width="800px" height="500px"></iframe>
+            </section>
+        
+            <section>
+                <h2>Live-reloading!<br><br>&amp;<br><br>multi-device debugging!!</h2>
+            </section>
+
+            <section>
+                <h2>App Harness<small> alpha</small></h2>
+                <p>Cordova, on-going project.<br>Will be integrated in PhoneGap SDK.</p>
+                <p><img src="appharness.png"></p>
+                <p><a href="https://github.com/apache/cordova-app-harness" target="_blank">https://github.com/apache/cordova-app-harness</a></p>
+            </section>
+
+            <section>
+                <h2>Monaca Debugger</h2>
+                <p>Part of Monaca development cloud.</p>
+                <p><a href="http://monaca.mobi/" target="_blank">Monaca PhoneGap IDE</a></p>
+            </section>
+            
+            <section>
+                <h3>Thank You!</h3>
+                <p>
+                  Slide: <a href="http://monaca.github.io/slides/2014-pg-debug/" target="_blank">http://monaca.github.io/slides/2014-pg-debug/</a>
+                </p>
+            </section>
+        </div>
+
+        <div style="font-family: 'Helvetica Neue'; position: absolute; right: 1em; bottom: 1em; font-size: 50%; color: #aaa;">
+            GAME &amp; APPS Devs SF Meetup / Feb. 4, 2014
+        </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // Full list of configuration options available here:
+          // https://github.com/hakimel/reveal.js#configuration
+          Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+            backgroundTransition: 'slide',
+    
+            theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+    
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+    
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+              { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+              { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+              { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+              { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+          });
+    
+          var video = document.querySelector('video');
+          var canvas = document.querySelector('canvas');
+          var ctx = canvas.getContext('2d');
+          var localMediaStream = null;
+      
+          //カメラ使えるかチェック
+          var hasGetUserMedia = function() {
+            return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+              navigator.mozGetUserMedia || navigator.msGetUserMedia);
+          }
+          //エラー
+          var onFailSoHard = function(e) {
+            console.log('エラー!', e);
+          };
+      
+          //カメラ画像キャプチャ
+          var snapshot = function() {
+            if (localMediaStream) {
+              ctx.drawImage(video, 0, 0);
+              document.querySelector('img').src = canvas.toDataURL('image/webp');
+            }
+          }
+      
+          if (hasGetUserMedia()) {
+            console.log("Camera OK. Hit W to activate.");
+          } else {
+            alert("Your browser does not support camera!");
+          }
+      
+          window.URL = window.URL || window.webkitURL;
+          navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                        navigator.mozGetUserMedia || navigator.msGetUserMedia;
+      
+          navigator.getUserMedia({video: true}, function(stream) {
+            video.src = window.URL.createObjectURL(stream);
+            localMediaStream = stream;
+          }, onFailSoHard);
+      
+          snapshot();
+    </script>
+
+</body>
+
+</html>
