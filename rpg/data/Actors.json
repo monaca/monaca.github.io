@@ -1,0 +1,5 @@
+[
+null,
+{"id":1,"battlerName":"Actor1_1","characterIndex":1,"characterName":"Cordova","classId":1,"equips":[1,1,2,3,0],"faceIndex":1,"faceName":"Cordova","traits":[],"initialLevel":1,"maxLevel":99,"name":"Cordova","nickname":"","note":"","profile":""},
+{"id":2,"battlerName":"","characterIndex":0,"characterName":"Cordova","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"Cordova","traits":[],"initialLevel":1,"maxLevel":99,"name":"PhoneGap","nickname":"","note":"","profile":""}
+]

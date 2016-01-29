@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <link rel="icon" href="icon/icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon/icon.png">
+  <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
+  <script src="components/loader.js"></script>
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Cordova-kun's Final Quest</title>
+  <script>
+    document.addEventListener('deviceready' , onDeviceReady,false);
+        console.log("Program start");
+
+        function onDeviceReady() {
+          console.log("Device ready is ok");
+        
+          var delegate = new cordova.plugins.locationManager.Delegate();
+         
+          delegate.didDetermineStateForRegion = function (pluginResult) {
+            console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+          };
+         
+          delegate.didStartMonitoringForRegion = function (pluginResult) {
+            console.log('didStartMonitoringForRegion:', pluginResult);
+          };
+         
+          delegate.didRangeBeaconsInRegion = function (pluginResult) {
+            console.log("didRangeBeaconsInRegion", pluginResult);
+            var beacons = pluginResult.beacons;   
+            var length = beacons.length;
+            
+            if (length > 0) {
+              var beacon = beacons[0];
+              var proximity = beacon.proximity;
+              if (proximity == "ProximityImmediate") {
+                if ($gameSwitches) {
+                  $gameSwitches.setValue(18 , true);
+                }
+              }
+            }
+          };
+         
+          var uuid = '2F234454-CF6D-ADF2-F4911BA9FFA6';
+          var identifier = '';
+          var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid);
+         
+          cordova.plugins.locationManager.setDelegate(delegate);
+          
+          // required in iOS 8+
+          cordova.plugins.locationManager.requestWhenInUseAuthorization(); 
+         
+          cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
+          .fail(console.error)
+          .done();
+         
+          cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
+          .fail(console.error)
+          .done();
+        }
+  </script>
+</head>
+
+<body style="background-color: black">
+  <script type="text/javascript" src="js/libs/pixi.js"></script>
+  <script type="text/javascript" src="js/libs/fpsmeter.js"></script>
+  <script type="text/javascript" src="js/libs/lz-string.js"></script>
+  <script type="text/javascript" src="js/rpg_core.js"></script>
+  <script type="text/javascript" src="js/rpg_managers.js"></script>
+  <script type="text/javascript" src="js/rpg_objects.js"></script>
+  <script type="text/javascript" src="js/rpg_scenes.js"></script>
+  <script type="text/javascript" src="js/rpg_sprites.js"></script>
+  <script type="text/javascript" src="js/rpg_windows.js"></script>
+  <script type="text/javascript" src="js/plugins.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>
