@@ -1,0 +1,114 @@
+<template>
+  <style>
+    span {
+      color: #ccd6dd;
+      cursor: pointer;
+      display: inline-block;
+      transform: scale3d(1.0, 1.0, 1.0);
+      -webkit-transform: scale3d(1.0, 1.0, 1.0);
+      -moz-transform: scale3d(1.0, 1.0, 1.0);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    @-webkit-keyframes favorite-star-bounce {
+      0% {
+        -webkit-transform: scale3d(1.0, 1.0, 1.0);
+      }
+      50% {
+        -webkit-transform: scale3d(1.4, 1.4, 1.0);
+      }
+      to {
+        -webkit-transform: scale3d(1.0, 1.0, 1.0);
+      }
+    }
+    @-moz-keyframes favorite-star-bounce {
+      0% {
+        -moz-transform: scale3d(1.0, 1.0, 1.0);
+      }
+      50% {
+        -moz-transform: scale3d(1.4, 1.4, 1.0);
+      }
+      to {
+        -moz-transform: scale3d(1.0, 1.0, 1.0);
+      }
+    }
+    @keyframes favorite-star-bounce {
+      0% {
+        transform: scale3d(1.0, 1.0, 1.0);
+      }
+      50% {
+        transform: scale3d(1.4, 1.4, 1.0);
+      }
+      100% {
+        transform: scale3d(1.0, 1.0, 1.0);
+      }
+    }
+    span[active] {
+      color: #ffac33;
+      -webkit-animation: favorite-star-bounce 0.3s ease-in-out;
+      -moz-animation: favorite-star-bounce 0.3s ease-in-out;
+      animation: favorite-star-bounce 0.3s ease-in-out;
+    }
+    span:hover:not([active]) {
+      color: #f5c682;
+    }
+  </style>
+
+  <span>&#x2605;</span>
+</template>
+
+<script>
+  // Get current document
+  const thisDoc = document.currentScript.ownerDocument;
+
+  class FavoriteStar extends HTMLElement {
+    constructor() {
+      super();
+
+      // Get and clone the <template>
+      const template = thisDoc.querySelector('template');
+      const clone = document.importNode(template.content, true);
+
+      // Create shadow DOM
+      const shadowRoot = this.attachShadow({mode: 'open'});
+      shadowRoot.appendChild(clone);
+
+      // Save a reference to the star element
+      this.starElement = shadowRoot.querySelector('span');
+      this.boundOnClick = this.toggle.bind(this);
+    }
+
+    connectedCallback() {
+      this.addEventListener('click', this.boundOnClick);
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('click', this.boundOnClick);
+    }
+
+    static get observedAttributes() {
+      return ['active'];
+    }
+
+    attributeChangedCallback(attr, oldValue, newValue) {
+      if (attr === 'active') {
+        // Update the star element
+        console.log('toggle!')
+        this.toggle.call(this.starElement);
+      }
+    }
+
+    toggle() {
+      if (this.hasAttribute('active')) {
+        this.removeAttribute('active');
+      } else {
+        this.setAttribute('active', '');
+      }
+    }
+  }
+
+  window.customElements.define('favorite-star', FavoriteStar);
+</script>

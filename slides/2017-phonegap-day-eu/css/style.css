@@ -1,0 +1,71 @@
+.reveal section img.reset-img {
+  margin: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.columns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.wc-table {
+  display: inline-table;
+  font-size: 24px !important;
+}
+
+table, th, td {
+  border: 0 !important;
+}
+
+.wc-yes {
+  background-color: rgb(114, 191, 121);
+}
+
+.wc-kinda {
+  background-color: rgb(223, 211, 91);
+}
+
+.wc-vote {
+  background-color: rgb(100, 176, 177);
+}
+
+.showcase-carousel {
+  width: 600px;
+  height: 150px;
+  border: 3px solid #AAA !important;
+}
+
+.api-sample-column {
+  min-width: 600px;
+  max-width: 600px;
+}
+
+.iframe-sample {
+  width: 360px;
+  height: 600px;
+  border: 0;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+section#monaca-ci {
+  color: #333;
+}
+
+section#monaca-ci h3 {
+  color: #333;
+}
+
+.plan-column {
+  min-width: 700px;
+  max-width: 700px;
+}
+
+.iframe-full {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+

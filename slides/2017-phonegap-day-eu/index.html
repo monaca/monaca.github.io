@@ -1,0 +1,597 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Onsen UI - PhoneGap Day EU 2017</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.0-rc.11/webcomponents-lite.js"></script>
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Custom CSS and components -->
+		<link rel="stylesheet" href="css/style.css">
+    <link rel="import" href="favorite-star.html">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+        <!-- INTRO -->
+        <section data-markdown>
+          <textarea data-template>
+            #### PhoneGap Day EU 2017
+            ## Web Components: creating reusable user interface
+
+            Speaker: <img src="./assets/japan-flag.png" class="reset-img" style="width: 40px"> __Masa Tanaka__
+
+            <br>
+            <img src="./assets/monaca-logo.png" class="reset-img" style="width: 30px"> __Monaca__ &amp; <img src="./assets/onsenui-logo.png" class="reset-img" style="width: 30px"> __Onsen UI__
+
+            <aside class="notes" data-markdown>
+              ### Introduction
+
+              - About me, country, position
+              - About projects.
+
+            </aside>
+          </textarea>
+        </section>
+        <!-- Web Components -->
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Web Components <img src="./assets/web-components-logo.svg" class="reset-img" style="width: 100px">
+              _The building blocks of the future web_
+
+              * HTML Templates: reusable DOM loadable on demand <!-- .element: class="fragment fade-up" -->
+              <li>Custom Elements: literally custom HTML elements beyond _div_ and _span_</li> <!-- .element: class="fragment fade-up" -->
+              * Shadow DOM: CSS and DOM encapsulation in a component <!-- .element: class="fragment fade-up" -->
+              * HTML Imports: packaging mechanism that prevents inlining components <!-- .element: class="fragment fade-up" -->
+
+              <aside class="notes" data-markdown>
+                ### Web Components
+
+                - Building blocks of the future web
+                - Composed of 4 technologies. Briefly explain each one.
+
+              </aside>
+          </textarea>
+          </section>
+          <!-- Simple and Powerful API -->
+          <section>
+            <h3>Simple yet Powerful API (v1)</h3>
+
+            Favorite Star <favorite-star></favorite-star>
+
+            <div data-markdown>
+              <textarea data-template>
+                ```
+                  <link rel="import" href="favorite-star.html">
+                ```
+
+                ```
+                  <!-- favorite-star.html -->
+
+                  <template>
+                    <style>
+                      span[active] {
+                        color: #ffac33;
+                        animation: favorite-star-bounce 0.3s ease-in-out;
+                      }
+                      span:hover:not([active]) {
+                        color: #f5c682;
+                      }
+
+                      /* Extra style omitted */
+                    </style>
+
+                    <span>&#x2605;</span>
+                  </template>
+
+                  <script>
+                  // Get current document
+                  const thisDoc = document.currentScript.ownerDocument;
+
+                  class FavoriteStar extends HTMLElement {
+                    constructor() {
+                      super();
+
+                      // Get and clone the <template>
+                      const template = thisDoc.querySelector('template');
+                      const clone = document.importNode(template.content, true);
+
+                      // Create shadow DOM
+                      const shadowRoot = this.attachShadow({mode: 'open'});
+                      shadowRoot.appendChild(clone);
+
+                      // Save a reference to the star element
+                      this.starElement = shadowRoot.querySelector('span');
+                      this.boundOnClick = this.toggle.bind(this);
+                    }
+
+                    connectedCallback() {
+                      this.addEventListener('click', this.boundOnClick);
+                    }
+
+                    disconnectedCallback() {
+                      this.removeEventListener('click', this.boundOnClick);
+                    }
+
+                    static get observedAttributes() {
+                      return ['active'];
+                    }
+
+                    attributeChangedCallback(attr, oldValue, newValue) {
+                      if (attr === 'active') {
+                        // Update the star element
+                        console.log('toggle!')
+                        this.toggle.call(this.starElement);
+                      }
+                    }
+
+                    toggle() {
+                      if (this.hasAttribute('active')) {
+                        this.removeAttribute('active');
+                      } else {
+                        this.setAttribute('active', '');
+                      }
+                    }
+                  }
+
+                  window.customElements.define('favorite-star', FavoriteStar);
+                  </script>
+                ```
+
+                <aside class="notes" data-markdown>
+                  ### FavStar example
+
+                  - Show how simple is Web Component API
+                  - The visible star in the slide is a real web component that can be clicked.
+                  - First line shows how to import the component in any document with HTML imports.
+                  - The code shows a HTML template element that contains the body of the star as well as its style. The style is scoped (thanks to the shadow DOM) and only affects this component. As a visible example, it styles `span` elements but only affects the star.
+                  - The rest is just a ES6 class with typical Custom Elements v1 callbacks. In the constructor, it creates a shadowDOM that uses the previous template element.
+                  - It is possible to open the developer console, inspect the star and manually change its `active` attribute as an example.
+
+                </aside>
+              </textarea>
+            </div>
+          </section>
+          <!-- Pros/Cons -->
+          <section>
+            <aside class="notes" data-markdown>
+              ### Pros/Cons
+
+              - As shown in the previous example, the API is quite simple
+              - But it is a trade-off. It is limited to string attributes and DOM props, so some information cannot be passed declaratively. Some frameworks create components in a different way to overcome this limitation (like React/Vue props)
+              - It will be native at some point, which suggests better performance than frameworks
+              - But as everything in the browser side, it takes time to be supported by all major browsers even though it is a standard
+              - Briefly comment the table (focus on custom elements?) and the possibiliy of using polyfills meanwhile
+
+            </aside>
+            <div class="columns">
+              <div data-markdown>
+                <textarea data-template>
+                  ## Pros
+
+                  * Simplicity <!-- .element: class="fragment fade-up" data-fragment-index="1" -->
+                  * Browser native support <!-- .element: class="fragment fade-up" data-fragment-index="3" -->
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+                  ## Cons
+
+                  * HTML attributes are only strings <!-- .element: class="fragment fade-up" data-fragment-index="2" -->
+                  * Under development (soon™) <!-- .element: class="fragment fade-up" data-fragment-index="4" -->
+                </textarea>
+              </div>
+            </div>
+            <div class="fragment" data-fragment-index="5">
+              <table class="wc-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2"></th>
+                  </tr>
+                  <tr>
+                    <th>Polyfill</th>
+                    <th>Chrome/Opera</th>
+                    <th>Firefox</th>
+                    <th>Safari</th>
+                    <th>Edge</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Templates</th>
+                    <td class="wc-yes">✓</td>
+                    <td class="wc-yes">Stable</td>
+                    <td class="wc-yes">Stable</td>
+                    <td class="wc-yes">8</td>
+                    <td class="wc-yes">13</td>
+                  </tr>
+                  <tr>
+                    <th>HTML Imports</th>
+                    <td class="wc-yes">✓</td>
+                    <td class="wc-yes">Stable</td>
+                    <td class="wc-kinda">On Hold</td>
+                    <td class="wc-vote">
+                      No Active Development
+                    </td>
+                    <td class="wc-vote">Deciding</td>
+                  </tr>
+                  <tr>
+                    <th>Custom Elements</th>
+                    <td class="wc-yes">✓</td>
+                    <td class="wc-yes">Stable</td>
+                    <td class="wc-yes">Flag</td>
+                    <td class="wc-yes">
+                      10.1
+                    </td>
+                    <td class="wc-vote">Deciding</td>
+                  </tr>
+                  <tr>
+                    <th>Shadow DOM</th>
+                    <td class="wc-yes">✓</td>
+                    <td class="wc-yes">Stable</td>
+                    <td class="wc-kinda">Bug</td>
+                    <td class="wc-yes">10</td>
+                    <td class="wc-vote">Deciding</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <!-- More than Polymer -->
+          <section>
+            <aside class="notes" data-markdown>
+              ### It is not polymer
+
+              - There is a misconception of `WebComponents === Polymer`, opinionated lib made by Google with MD style
+              - Anyone can make custom web components easily and there are other libs (like Polymer) that uses them to create UI components
+              - Transition into Onsen UI
+            </aside>
+
+              <h3><img src="./assets/web-components-logo.svg" class="reset-img" style="width: 100px"> !== <img src="./assets/polymer-logo.png" class="reset-img" style="width: 90px"></h3>
+              <div data-markdown>
+                <textarea data-template>
+                  ###  Web Components > Polymer
+
+                  Polymer Project is just a library built on top of Web Components that adds extra features. There are more:
+                </textarea>
+              </div>
+
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template>
+                    * Skate.js
+                    * X-Tag
+                  </textarea>
+                </div>
+                <div data-markdown>
+                  <textarea data-template>
+                    * Slim.js
+                    * Onsen UI <!-- .element: class="fragment grow highlight-red" -->
+                  </textarea>
+                </div>
+              </div>
+          </section>
+        </section>
+        <!-- Onsen UI -->
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              <img src="./assets/onsenui-logo-2.png" class="reset-img" style="width: 600px">
+
+              UI library to create hybrid &amp; progressive web apps. Features:
+
+              * Super Simple API <!-- .element: class="fragment fade-up" --> - _Web Components_ ❤
+              * Framework Agnostic <!-- .element: class="fragment fade-up" --> - _Web Components_ 💕
+              * Future Proof <!-- .element: class="fragment fade-up" --> - _Web Components_ 💘
+
+              <aside class="notes" data-markdown>
+                ### Onsen UI
+
+                - Describe about Onsen UI project and its relation to PhoneGap. Perhaps specify that it only uses Custom Elements.
+                - Feat: WC/CE make possible having a very simple API based on attributes, events and methods
+                - Feat: Framework Agnostic thanks again to WC/CE, since we don't need to import any framework to create components (it's just pure standard JavaScript) and can be plugged with anything else
+                - Feat: As mentioned before, WC/CE will be native at some point, thus enhancing Onsen UI performance and making it a good bet (there is no framework that will be obsolete like AngularJS, etc.)
+
+              </aside>
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## UI Components
+
+              <!-- <iframe src="https://onsenui.github.io/showcase-carousel" class="showcase-carousel fragment fade"></iframe> -->
+              <img src="./assets/carousel-ios.png" class="reset-img showcase-carousel"><img src="./assets/carousel-android.png" class="reset-img showcase-carousel">
+
+              ```
+              <ons-input type="search"></ons-input>
+              ```
+              <!-- .element: class="fragment fade-up" -->
+              ```
+              <ons-switch checked></ons-switch>
+              ```
+              <!-- .element: class="fragment fade-up" -->
+              ```
+              <ons-toast>Hi there! <button>Dismiss</button></ons-toast>
+              ```
+              <!-- .element: class="fragment fade-up" -->
+
+              <aside class="notes" data-markdown>
+                ### UI Components
+
+                - Many useful and easy to use components
+                - Some example code is provided (input, switch adn toast)
+                - Perhaps mention some extra components like Navigator, Tabbar or Splitter.
+
+              </aside>
+            </textarea>
+          </section>
+          <!-- Demo -->
+          <section data-background-color="#CCC">
+            <div class="columns">
+              <div>
+                <iframe src="./vue-onsenui-kitchensink/?platform=ios" scrolling="no" class="iframe-sample"></iframe>
+              </div>
+              <div>
+                <iframe src="./vue-onsenui-kitchensink/?platform=android#zoom=100" scrolling="no" class="iframe-sample"></iframe>
+              </div>
+            </div>
+
+            <aside class="notes" data-markdown>
+              ### Demo
+
+              - Play a little bit with the app
+              - Show at least pull hook, forms and the 2 types of "infinite" lists
+
+            </aside>
+          </section>
+          <!-- Bindings -->
+          <section>
+            <h5>Tailored API</h5>
+            <div class="columns">
+              <div data-markdown class="api-sample-column">
+                <textarea data-template>
+                  ###### <img src="./assets/js-logo.svg" class="reset-img" style="width: 50px"> JavaScript
+
+                  ```html
+                  <ons-dialog id="myDialog" cancelable>
+                    Content
+                  </ons-dialog>
+                  ```
+                  ```javascript
+                  document.getElementById('myDialog').show();
+                  ```
+                </textarea>
+              </div>
+              <div data-markdown class="api-sample-column">
+                <textarea data-template>
+                  ###### <img src="./assets/angular1-logo.svg" class="reset-img" style="width: 50px"> AngularJS
+
+                  ```html
+                  <ons-dialog var="myDialog" cancelable>
+                    Content
+                  </ons-dialog>
+                  ```
+                  ```javascript
+                  $scope.myDialog.show();
+                  ```
+                </textarea>
+              </div>
+            </div>
+            <div class="columns">
+              <div data-markdown class="api-sample-column">
+                <textarea data-template>
+                  ###### <img src="./assets/react-logo.svg" class="reset-img" style="width: 50px"> React
+
+                  ```html
+                  <Ons.Dialog isCancelable={true}
+                    onCancel={() => this.setState({dialogOpen: false})}
+                    isOpen={this.state.dialogOpen}
+                  >
+                    Content
+                  </Ons.Dialog>
+                  ```
+                  ```javascript
+                  this.setState({dialogOpen: true});
+                  ```
+                </textarea>
+              </div>
+              <div data-markdown class="api-sample-column">
+                <textarea data-template>
+                  ###### <img src="./assets/vue-logo.svg" class="reset-img" style="width: 50px"> Vue
+
+                  ```html
+                  <v-ons-dialog cancelable
+                    :visible.sync="dialogVisible"
+                  >
+                    Content
+                  </v-ons-dialog>
+                  ```
+                  ```javascript
+                  this.dialogVisible = true;
+                  ```
+                </textarea>
+              </div>
+            </div>
+
+            <aside class="notes" data-markdown>
+              ### Bindings API
+
+              - We provide small packages that wrap the core WC/CE and "translate" the API to something more natural in frameworks like React, Angular and View. (Mention that it can support anything and there are already bindings for Angular2 + Ember and Aurelia -- community based)
+              - Compare how a dialog is used in JS, AngularJS, React and Vue. (React and Vue use props. React must handle events manually in order to synchronize the UI back with the props. Vue provides a 'sync' modifier to do it automatically).
+
+            </aside>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+
+              ### Structure of Onsen UI
+              
+              - <a href="https://onsen.io/v2/docs/css.html" target="_blank" style="color: white;">CSS Components</a>
+              - <a href="https://onsen.io/v2/docs/js.html" target="_blank" style="color: white">Web Components (Custom Elements)</a>
+              - <a href="https://onsen.io/" target="_blank" style="color: white">Framework Bindings</a>
+
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+
+              #### Interactive Tutorial
+              
+              <a href="http://tutorial.onsen.io/?framework=angular2&category=reference&module=progress" target="_blank"><img src="assets/tutorial.png"></a>
+
+            </textarea>
+          </section>
+
+
+        </section>
+
+        <!-- Monaca -->
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              <img src="./assets/Monaca_Logo_02.svg" class="reset-img" style="width: 600px">
+
+              Integrated development platform for Cordova.
+
+              - Built on top of cloud
+              - Framework agnostic
+              - Online IDE and local tools
+
+              <aside class="notes" data-markdown>
+                ### Monaca
+
+              </aside>
+            </textarea>
+          </section>
+
+          <section data-markdown data-background-color="#ffffff">
+            <textarea data-template>
+              ## Livesync debugger
+
+              Free download available from App Store &amp; Google Play Store.
+
+              <img src="https://monaca.io/img/debugger/img_3_en.jpg">
+
+              <aside class="notes" data-markdown>
+                ### Monaca
+
+              </aside>
+            </textarea>
+          </section>
+
+          <section id="monaca-ci" data-markdown data-background-image="https://monaca.io/img/ci/keyvisual.jpg">
+            <textarea data-template>
+              <img src="https://monaca.io/img/ci/logo_monaca_ci.png" class="reset-img" style="width: 400px">
+              ### Continuous integration &amp; deployment
+
+              - Github &amp; BitBucket support
+              - Deploy to Hockey App and DeployGate
+              - Distribute to iOS App Store via Monaca Cloud
+              
+              <aside class="notes" data-markdown>
+                ### Monaca
+
+              </aside>
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              <img src="./assets/push_notifications1600.png" class="reset-img" style="width: 300px">
+              ## Backend as a service
+
+              - Push notifications
+              - User management
+              - Cloud database
+
+              <aside class="notes" data-markdown>
+                ### Monaca
+
+              </aside>
+            </textarea>
+          </section>
+
+          <section>
+            <div class="columns">
+              <div data-markdown class="plan-column">
+                <textarea data-template>
+                  #### Free plan
+
+                  - Browser based IDE
+                  - iOS / Android / Windows build
+                  - Live debugger
+                  - Backend as a service (Push, user, collections...)
+                  - Limited to 3 projects
+                </textarea>
+              </div>
+              <div data-markdown class="plan-column">
+                <textarea data-template>
+                  #### Commercial plan
+
+                  - Starting from $16/month
+                  - iOS App Store deployment
+                  - Enhanced security
+                  - In app update feature
+                  - Technical support included
+                </textarea>
+              </div>
+            </div>
+            <aside class="notes" data-markdown>
+              ### UI Components
+
+
+            </aside>
+          </section>
+        </section>
+        <!-- DEMO -->
+        <section data-markdown>
+          <textarea data-template>
+            # DEMO
+          </textarea>
+        </section>
+        <!-- Questions -->
+        <section data-markdown>
+          <textarea data-template>
+            # Questions?
+          </textarea>
+        </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
